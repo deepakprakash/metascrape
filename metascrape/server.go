@@ -1,13 +1,22 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/codegangsta/negroni"
 	"github.com/julienschmidt/httprouter"
 	"github.com/pilu/fresh/runner/runnerutils"
+
+	"github.com/deepakprakash/metascrape"
 )
+
+var scraper *metascrape.MetaScraper
+
+func init() {
+	scraper = metascrape.Default()
+}
 
 func main() {
 	// Create a new router object
@@ -75,7 +84,17 @@ func getAPIMeta(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	if urlInput := r.FormValue("url"); len(urlInput) > 0 {
 		// Call the metascrape lib and write output or error
+		if data, err := scraper.Scrape(urlInput); err == nil {
+			// Convert to JSON
+			jsonResp, _ := json.Marshal(data)
 
+			// Write to HTML
+			fmt.Fprint(w, string(jsonResp))
+
+		} else {
+			//
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		}
 	} else {
 		http.Error(w, "`url` parameter is empty or missing.", http.StatusBadRequest)
 	}
