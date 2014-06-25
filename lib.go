@@ -81,3 +81,9 @@ func Default() *MetaScraper {
 	scraper := New()
 	return scraper
 }
+
+func fetchURL(url string) (*http.Response, error) {
+
+	// TODO: Implement timeouts / data restrictions
+	return http.Get(url)
+}

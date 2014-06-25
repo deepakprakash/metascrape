@@ -1,4 +1,4 @@
-package metascrape
+package utils
 
 import (
 	"net/http"
@@ -6,13 +6,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func fetchURL(url string) (*http.Response, error) {
-
-	// TODO: Implement timeouts / data restrictions
-	return http.Get(url)
-}
-
-func extractTitle(doc *goquery.Document) string {
+func ExtractTitle(doc *goquery.Document) string {
 
 	if title := doc.Find("title").First().Text(); len(title) > 0 {
 		return title
@@ -33,7 +27,7 @@ func extractTitle(doc *goquery.Document) string {
 	return ""
 }
 
-func extractDescription(doc *goquery.Document) string {
+func ExtractDescription(doc *goquery.Document) string {
 
 	if description, exists := doc.Find("meta[name='description']").First().Attr("content"); exists == true {
 		return description
@@ -50,7 +44,7 @@ func extractDescription(doc *goquery.Document) string {
 	return ""
 }
 
-func extractThumbnailURL(doc *goquery.Document) string {
+func ExtractThumbnailURL(doc *goquery.Document) string {
 
 	if thumbnail, exists := doc.Find("meta[name='thumbnail']").First().Attr("content"); exists == true {
 		return thumbnail
@@ -67,7 +61,7 @@ func extractThumbnailURL(doc *goquery.Document) string {
 	return ""
 }
 
-func extractCanonicalURL(doc *goquery.Document, response *http.Response) string {
+func ExtractCanonicalURL(doc *goquery.Document, response *http.Response) string {
 
 	if canonical, exists := doc.Find("link[rel='canonical']").First().Attr("href"); exists == true {
 		return canonical
