@@ -7,6 +7,8 @@ import (
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
+
+	"github.com/deepakprakash/metascrape/contrib"
 )
 
 func Test() {
@@ -79,6 +81,9 @@ func New() *MetaScraper {
 
 func Default() *MetaScraper {
 	scraper := New()
+
+	scraper.Use(contrib.GenericHandler)
+
 	return scraper
 }
 
