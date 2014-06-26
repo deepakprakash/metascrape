@@ -22,7 +22,7 @@ type MetaScraper struct {
 }
 
 func (scraper *MetaScraper) Use(handler ScrapeHandler) {
-	scraper.handlers = append(scraper.handlers, handler)
+	scraper.handlers = append(scraper.handlers[:0], append([]ScrapeHandler{handler}, scraper.handlers[0:]...)...)
 }
 
 func (scraper *MetaScraper) Scrape(urlInput string) (map[string]interface{}, error) {
