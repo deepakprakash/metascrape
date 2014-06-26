@@ -11,10 +11,6 @@ import (
 	"github.com/deepakprakash/metascrape/contrib"
 )
 
-func Test() {
-	fmt.Println("Hello from the lib!")
-}
-
 type ScrapeHandler func(resp *http.Response, doc *goquery.Document) (map[string]interface{}, bool)
 
 type MetaScraper struct {
@@ -27,13 +23,6 @@ func (scraper *MetaScraper) Use(handler ScrapeHandler) {
 
 func (scraper *MetaScraper) Scrape(urlInput string) (map[string]interface{}, error) {
 
-	// data := make(map[string]interface{})
-	//
-	// data["type"] = "Webpage"
-	// data["site"] = ""
-	//
-	// return data, nil
-
 	if pURL, err := url.ParseRequestURI(urlInput); err == nil {
 		// This is a valid URL.
 
@@ -45,7 +34,6 @@ func (scraper *MetaScraper) Scrape(urlInput string) (map[string]interface{}, err
 			if doc, err := goquery.NewDocumentFromResponse(response); err == nil {
 
 				for _, handler := range scraper.handlers {
-					fmt.Println(handler)
 					// metaData := GenericHandler(response, doc)
 					if metaData, matched := handler(response, doc); matched == true {
 						// Handler was able to process
