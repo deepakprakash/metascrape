@@ -83,6 +83,7 @@ func Default() *MetaScraper {
 	scraper := New()
 
 	scraper.Use(contrib.GenericHandler)
+	scraper.Use(contrib.EtsyProductHandler)
 
 	return scraper
 }
