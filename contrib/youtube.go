@@ -46,7 +46,6 @@ Custom return data:
 func YouTubeVideoHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
 
 	apiKey := os.Getenv("YOUTUBE_API_KEY")
-	// apiKey := "AIzaSyBXcrw5QMbYYrrJoeQGbs7uhGXJoHq6MSk"
 	if len(apiKey) == 0 {
 		// API Key for Youtube is required
 		return nil, false
