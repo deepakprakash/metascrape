@@ -43,7 +43,7 @@ Custom return data:
     creator: "TODO"
     embedDetails: "TODO"
 */
-func YoutubeVideoHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
+func YouTubeVideoHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
 
 	apiKey := os.Getenv("YOUTUBE_API_KEY")
 	// apiKey := "AIzaSyBXcrw5QMbYYrrJoeQGbs7uhGXJoHq6MSk"

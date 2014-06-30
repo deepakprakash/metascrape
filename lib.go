@@ -72,7 +72,7 @@ func Default() *MetaScraper {
 
 	scraper.Use(contrib.GenericHandler)
 	scraper.Use(contrib.EtsyProductHandler)
-	scraper.Use(contrib.YoutubeVideoHandler)
+	scraper.Use(contrib.YouTubeVideoHandler)
 
 	return scraper
 }
