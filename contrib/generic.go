@@ -16,7 +16,7 @@ func GenericHandler(response *http.Response, doc *goquery.Document) (map[string]
 
 	meta["title"] = utils.ExtractTitle(doc)
 	meta["description"] = utils.ExtractDescription(doc)
-	meta["thumbnailURL"] = utils.ExtractThumbnailURL(doc)
+	meta["thumbnailUrl"] = utils.ExtractThumbnailURL(doc)
 	meta["url"] = utils.ExtractCanonicalURL(doc, response)
 
 	meta["extraData"] = nil

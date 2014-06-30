@@ -118,7 +118,7 @@ func YoutubeVideoHandler(response *http.Response, doc *goquery.Document) (map[st
 							meta["type"] = "Video"
 							meta["provider"] = "YouTube"
 							meta["title"] = item.Snippet.Title
-							meta["thumbnailURL"] = item.Snippet.Thumbnails.Medium.Url
+							meta["thumbnailUrl"] = item.Snippet.Thumbnails.Medium.Url
 							meta["extraData"] = extraData
 
 							return meta, true
