@@ -73,6 +73,7 @@ func Default() *MetaScraper {
 	scraper.Use(contrib.GenericHandler)
 	scraper.Use(contrib.EtsyProductHandler)
 	scraper.Use(contrib.YouTubeVideoHandler)
+	scraper.Use(contrib.SoundCloudAudioHandler)
 
 	return scraper
 }
