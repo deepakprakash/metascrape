@@ -12,7 +12,7 @@ func GenericHandler(response *http.Response, doc *goquery.Document) (map[string]
 	meta := make(map[string]interface{})
 
 	meta["type"] = "Webpage"
-	meta["site"] = ""
+	meta["provider"] = ""
 
 	meta["title"] = utils.ExtractTitle(doc)
 	meta["description"] = utils.ExtractDescription(doc)

@@ -27,7 +27,7 @@ Matching is done if:
 
 Custom return data:
   type: "Video"
-  site: "YouTube"
+  provider: "YouTube"
 
   extraData:
     datePublished: "Date/Time when this was published."
@@ -116,7 +116,7 @@ func YoutubeVideoHandler(response *http.Response, doc *goquery.Document) (map[st
 							extraData["datePublished"] = item.Snippet.PublishedAt
 
 							meta["type"] = "Video"
-							meta["site"] = "YouTube"
+							meta["provider"] = "YouTube"
 							meta["title"] = item.Snippet.Title
 							meta["thumbnailURL"] = item.Snippet.Thumbnails.Medium.Url
 							meta["extraData"] = extraData

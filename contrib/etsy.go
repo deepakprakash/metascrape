@@ -18,7 +18,7 @@ Matching is done if:
 
 Custom return data:
   type: "Product"
-  site: "Etsy"
+  provider: "Etsy"
 
   extraData:
     price: "Numeric value of the list price."
@@ -45,7 +45,7 @@ func EtsyProductHandler(response *http.Response, doc *goquery.Document) (map[str
 			meta, _ := GenericHandler(response, doc)
 
 			meta["type"] = "Product"
-			meta["site"] = "Etsy"
+			meta["provider"] = "Etsy"
 			meta["extraData"] = extraData
 
 			return meta, true
