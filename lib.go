@@ -75,6 +75,7 @@ func Default() *MetaScraper {
 	scraper.Use(contrib.YouTubeVideoHandler)
 	scraper.Use(contrib.SoundCloudAudioHandler)
 	scraper.Use(contrib.TwitterProfileHandler)
+	scraper.Use(contrib.TwitterStatusHandler)
 
 	return scraper
 }
