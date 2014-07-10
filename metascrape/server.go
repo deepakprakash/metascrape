@@ -10,9 +10,10 @@ import (
 	"github.com/pilu/fresh/runner/runnerutils"
 
 	"github.com/deepakprakash/metascrape"
+	"github.com/deepakprakash/metascrape/lib"
 )
 
-var scraper *metascrape.MetaScraper
+var scraper *lib.MetaScraper
 
 func init() {
 	scraper = metascrape.Default()

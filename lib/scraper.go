@@ -1,4 +1,4 @@
-package metascrape
+package lib
 
 import (
 	"errors"
@@ -7,8 +7,6 @@ import (
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
-
-	"github.com/deepakprakash/metascrape/contrib"
 )
 
 type ScrapeHandler func(resp *http.Response, doc *goquery.Document) (map[string]interface{}, bool)
@@ -58,26 +56,6 @@ func (scraper *MetaScraper) Scrape(urlInput string) (map[string]interface{}, err
 		// http.Error(w, fmt.Sprint("Invalid `url` input: ", urlInput), http.StatusBadRequest)
 		return nil, errors.New(fmt.Sprint("Invalid `url` input: ", urlInput))
 	}
-}
-
-func New() *MetaScraper {
-	scraper := new(MetaScraper)
-	scraper.handlers = []ScrapeHandler{}
-
-	return scraper
-}
-
-func Default() *MetaScraper {
-	scraper := New()
-
-	scraper.Use(contrib.GenericHandler)
-	scraper.Use(contrib.EtsyProductHandler)
-	scraper.Use(contrib.YouTubeVideoHandler)
-	scraper.Use(contrib.SoundCloudAudioHandler)
-	scraper.Use(contrib.TwitterProfileHandler)
-	scraper.Use(contrib.TwitterStatusHandler)
-
-	return scraper
 }
 
 func fetchURL(url string) (*http.Response, error) {
