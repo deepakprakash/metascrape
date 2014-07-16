@@ -11,6 +11,7 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/PuerkitoBio/goquery"
 
+	"github.com/deepakprakash/metascrape/lib"
 	"github.com/deepakprakash/metascrape/utils"
 )
 
@@ -71,7 +72,7 @@ Custom return data:
       "favouriteCount"
 
 */
-func TwitterProfileHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
+func TwitterProfileHandler(response *http.Response, doc *goquery.Document) (*lib.Metadata, bool) {
 
 	if api != nil {
 		if canonicalURL, err := url.Parse(utils.ExtractCanonicalURL(doc, response)); err == nil &&
@@ -85,29 +86,27 @@ func TwitterProfileHandler(response *http.Response, doc *goquery.Document) (map[
 				if user, err := api.GetUsersShow(username, nil); err == nil {
 					meta, _ := GenericHandler(response, doc)
 
-					extraData := make(map[string]interface{})
-					meta["extraData"] = extraData
+					// Assign the general properties
+					meta.SetType("Profile")
+					meta.SetProvider("Twitter")
+					meta.SetAttr("thumbnailUrl", user.ProfileImageUrlHttps)
 
 					// Populate the data from user object
-					extraData["handle"] = user.ScreenName
-					extraData["name"] = user.Name
-					extraData["location"] = user.Location
-					extraData["bio"] = user.Description
-					extraData["dateCreated"], _ = time.Parse(time.RubyDate, user.CreatedAt)
+					meta.SetAttr("handle", user.ScreenName)
+					meta.SetAttr("name", user.Name)
+					meta.SetAttr("location", user.Location)
+					meta.SetAttr("bio", user.Description)
+					dateTime, _ := time.Parse(time.RubyDate, user.CreatedAt)
+					meta.SetAttr("dateCreated", dateTime)
 
 					// Populate the statistics
 					stats := make(map[string]interface{})
-					extraData["statistics"] = stats
-
 					stats["followingCount"] = user.FriendsCount
 					stats["followerCount"] = user.FollowersCount
 					stats["tweetCount"] = user.StatusesCount
 					stats["favoriteCount"] = user.FavouritesCount
 
-					// Assign the general properties
-					meta["thumbnailUrl"] = user.ProfileImageUrlHttps
-					meta["type"] = "Profile"
-					meta["provider"] = "Twitter"
+					meta.SetAttr("statistics", stats)
 
 					return meta, true
 				}
@@ -204,7 +203,7 @@ Custom return data:
     author: "TODO"
 
 */
-func TwitterStatusHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
+func TwitterStatusHandler(response *http.Response, doc *goquery.Document) (*lib.Metadata, bool) {
 
 	if api != nil {
 		if canonicalURL, err := url.Parse(utils.ExtractCanonicalURL(doc, response)); err == nil &&
@@ -219,13 +218,15 @@ func TwitterStatusHandler(response *http.Response, doc *goquery.Document) (map[s
 					if tweet, err := api.GetTweet(statusId, nil); err == nil {
 						meta, _ := GenericHandler(response, doc)
 
-						extraData := extractTweetData(&tweet)
-						meta["extraData"] = extraData
+						data := extractTweetData(&tweet)
+						for key, val := range data {
+							meta.SetAttr(key, val)
+						}
 
-						// // Assign the general properties
-						// meta["thumbnailUrl"] = user.ProfileImageUrlHttps
-						meta["type"] = "Status"
-						meta["provider"] = "Twitter"
+						// Assign the general properties
+						// TODO: thumbnailUrl
+						meta.SetType("Status")
+						meta.SetProvider("Twitter")
 
 						return meta, true
 					}

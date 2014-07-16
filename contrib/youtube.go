@@ -10,6 +10,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 
+	"github.com/deepakprakash/metascrape/lib"
 	"github.com/deepakprakash/metascrape/utils"
 )
 
@@ -43,7 +44,7 @@ Custom return data:
     creator: "TODO"
     embedDetails: "TODO"
 */
-func YouTubeVideoHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
+func YouTubeVideoHandler(response *http.Response, doc *goquery.Document) (*lib.Metadata, bool) {
 
 	apiKey := os.Getenv("YOUTUBE_API_KEY")
 	if len(apiKey) == 0 {
@@ -104,21 +105,21 @@ func YouTubeVideoHandler(response *http.Response, doc *goquery.Document) (map[st
 					apiData := new(Result)
 
 					if err := json.Unmarshal(body, apiData); err == nil {
-						meta, _ := GenericHandler(response, doc)
 
 						if len(apiData.Items) > 0 {
 							item := apiData.Items[0]
 
-							extraData := make(map[string]interface{})
-							extraData["duration"] = item.ContentDetails.Duration
-							extraData["statistics"] = item.Statistics
-							extraData["datePublished"] = item.Snippet.PublishedAt
+							meta, _ := GenericHandler(response, doc)
+							meta.SetType("Video")
+							meta.SetProvider("YouTube")
 
-							meta["type"] = "Video"
-							meta["provider"] = "YouTube"
-							meta["title"] = item.Snippet.Title
-							meta["thumbnailUrl"] = item.Snippet.Thumbnails.Medium.Url
-							meta["extraData"] = extraData
+							// extraData := make(map[string]interface{})
+							meta.SetAttr("duration", item.ContentDetails.Duration)
+							meta.SetAttr("statistics", item.Statistics)
+							meta.SetAttr("datePublished", item.Snippet.PublishedAt)
+
+							meta.SetAttr("title", item.Snippet.Title)
+							meta.SetAttr("thumbnailUrl", item.Snippet.Thumbnails.Medium.Url)
 
 							return meta, true
 						}

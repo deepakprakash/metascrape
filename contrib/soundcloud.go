@@ -11,6 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 
+	"github.com/deepakprakash/metascrape/lib"
 	"github.com/deepakprakash/metascrape/utils"
 )
 
@@ -42,7 +43,7 @@ Custom return data:
     creator: "TODO"
     embedDetails: "TODO"
 */
-func SoundCloudAudioHandler(response *http.Response, doc *goquery.Document) (map[string]interface{}, bool) {
+func SoundCloudAudioHandler(response *http.Response, doc *goquery.Document) (*lib.Metadata, bool) {
 
 	apiKey := os.Getenv("SOUNDCLOUD_API_KEY")
 	if len(apiKey) == 0 {
@@ -98,30 +99,30 @@ func SoundCloudAudioHandler(response *http.Response, doc *goquery.Document) (map
 					if err := json.Unmarshal(body, apiData); err == nil {
 						meta, _ := GenericHandler(response, doc)
 
-						extraData := make(map[string]interface{})
+						// extraData := make(map[string]interface{})
 
 						// Statistics
 						stats := Statistics{apiData.CommentCount, apiData.FavouriteCount, apiData.ViewCount}
-						extraData["statistics"] = stats
+						meta.SetAttr("statistics", stats)
 
 						// Date is not in standard format - so process it.
 						dateString := strings.Replace(apiData.CreatedAt, "/", "-", -1)
 						dateString = strings.Replace(dateString, " ", "T", 1)
 						dateString = strings.Replace(dateString, " +00", "+00:", 1)
-						extraData["datePublished"], _ = time.Parse(time.RFC3339Nano, dateString)
+						dateTime, _ := time.Parse(time.RFC3339Nano, dateString)
+						meta.SetAttr("datePublished", dateTime)
 
 						// TODO: Convert duration in seconds to ISO_8601 format.
-						extraData["duration"] = apiData.Duration
+						meta.SetAttr("duration", apiData.Duration)
 
-						extraData["genre"] = apiData.Genre
+						meta.SetAttr("genre", apiData.Genre)
 
-						meta["type"] = "Audio"
-						meta["provider"] = "SoundCloud"
+						meta.SetAttr("title", apiData.Title)
+						meta.SetAttr("description", apiData.Description)
+						meta.SetAttr("thumbnailUrl", apiData.ArtworkUrl)
 
-						meta["title"] = apiData.Title
-						meta["description"] = apiData.Description
-						meta["thumbnailUrl"] = apiData.ArtworkUrl
-						meta["extraData"] = extraData
+						meta.SetType("Audio")
+						meta.SetProvider("SoundCloud")
 
 						return meta, true
 

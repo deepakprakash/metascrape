@@ -9,7 +9,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type ScrapeHandler func(resp *http.Response, doc *goquery.Document) (map[string]interface{}, bool)
+type ScrapeHandler func(resp *http.Response, doc *goquery.Document) (*Metadata, bool)
 
 type MetaScraper struct {
 	handlers []ScrapeHandler
@@ -19,7 +19,7 @@ func (scraper *MetaScraper) Use(handler ScrapeHandler) {
 	scraper.handlers = append(scraper.handlers[:0], append([]ScrapeHandler{handler}, scraper.handlers[0:]...)...)
 }
 
-func (scraper *MetaScraper) Scrape(urlInput string) (map[string]interface{}, error) {
+func (scraper *MetaScraper) Scrape(urlInput string) (*Metadata, error) {
 
 	if pURL, err := url.ParseRequestURI(urlInput); err == nil {
 		// This is a valid URL.
