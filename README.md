@@ -11,9 +11,10 @@ When you are programmatically trying to make sense of URLs or websites, it usual
 
 1. Scraping the URLs.
 
-  This is relatively simple and has a large variety of libraries and tools to help with it. However, it can end up being a lot of grunt work if simple scraping of the site doesn't give you enough information and you need to resort to site specific APIs.
+  Relatively simple and has a large variety of libraries and tools to help with it. However, it can end up being a lot of grunt work if simple scraping of the site doesn't give you enough information and you need to resort to site specific APIs.
 
 2. Categorizing and extracting sensible data.
+  
   This is much harder, mainly because:
   - There are very few standardized meta tags/representation and there is no guarantee a given website will implement any of it.
   - Data is very different for varied types of URLs - for instance a YouTube Video vs an Amazon Product.
@@ -27,9 +28,9 @@ Metascrape (hopefully) abstracts away the complexity of this process by:
 
 ## Uses
 - Displaying "rich snippets" for websites like those found on Facebook, Google search results, Nuzzel, etc.
-- Extracting useful information from websites for various kinds of analytics, trend analysis, etc.
+- Extracting useful information from websites for various kinds of analytics, trend analysis, better search, etc.
 
-Metascrape is NOT a silver bullet for most things. Metascrape makes 
+Note: While explaining Metascrape, some people tend to believe that Metascrape will magically take care of their core analysis, data processing etc. It doesn't. Metascrape simply makes accessing semantic web data easier and structured. You still need to do whatever you need to do with that data.
 
 ## Library
 
